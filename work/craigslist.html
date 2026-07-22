@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Craigslist NLP — Tanya Sohal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;0,1000;1,400;1,700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="project.css">
+</head>
+<body>
+  <nav class="nav" aria-label="Primary">
+    <a href="../index.html" class="nav-logo">tanya</a>
+    <div class="nav-actions">
+      <button class="theme-toggle" type="button" aria-label="Toggle dark mode" onclick="toggleTheme()"></button>
+    </div>
+  </nav>
+
+  <main class="case-page">
+    <h1 class="case-title">Uncovering Customer Pain Points on Craigslist using ML</h1>
+
+    <div class="case-intro">
+      <div class="case-tags">
+        <span class="case-tag">NLP</span>
+        <span class="case-tag">Text Analytics</span>
+        <span class="case-tag">Machine Learning</span>
+      </div>
+
+      <p class="case-subtitle">I built an NLP pipeline that scraped, cleaned, and analyzed 900 forum posts, then trained a classifier that can flag complaints automatically.</p>
+
+      <div class="tool-row" aria-label="Tools and concepts">
+        <span class="tool-chip">Python</span>
+        <span class="tool-chip">BeautifulSoup</span>
+        <span class="tool-chip">Sentiment Analysis (VADER)</span>
+        <span class="tool-chip">Topic Modeling (LDA)</span>
+        <span class="tool-chip">TF-IDF</span>
+        <span class="tool-chip">K-Means Clustering</span>
+        <span class="tool-chip">Logistic Regression</span>
+        <span class="tool-chip">SVM</span>
+        <span class="tool-chip">Random Forest</span>
+      </div>
+    </div>
+
+    <div class="case-layout">
+      <article class="case-content">
+        <section class="case-section">
+          <h2><span class="section-mark">01</span> The Problem</h2>
+          <p><a href="https://www.craigslist.org/about/" class="inline-link" target="_blank" rel="noopener noreferrer">Craigslist</a>’s Feedback, Flag Help, and Help Desk forums are full of unfiltered user complaints and suggestions, but none of it gets read systematically. Platform managers were relying on manual scanning to catch recurring problems, which meant frustrations around flagging, visibility, and moderation could sit unnoticed for months. I set out to turn those forums into a system that could surface real user pain points automatically.</p>
+        </section>
+
+        <section class="case-section">
+          <h2><span class="section-mark">02</span> The Approach</h2>
+          <div class="approach-list">
+            <div class="approach-item">
+              <span class="approach-num">1</span>
+              <div>
+                <h3>Core Question</h3>
+                <p>What are users actually frustrated about, and can a model catch it without a human reading every post?</p>
+              </div>
+            </div>
+            <div class="approach-item">
+              <span class="approach-num">2</span>
+              <div>
+                <h3>Scraping &amp; Cleaning</h3>
+                <p>Pulled ~900 posts, then cleaned and lemmatized the text.</p>
+              </div>
+            </div>
+            <div class="approach-item">
+              <span class="approach-num">3</span>
+              <div>
+                <h3>Sentiment Fix</h3>
+                <p>Ran VADER sentiment analysis, then added a frustration-keyword override to catch politely-worded complaints.</p>
+              </div>
+            </div>
+            <div class="approach-item">
+              <span class="approach-num">4</span>
+              <div>
+                <h3>Topic Modeling</h3>
+                <p>Used LDA to pull out 5 recurring complaint themes.</p>
+              </div>
+            </div>
+            <div class="approach-item">
+              <span class="approach-num">5</span>
+              <div>
+                <h3>Clustering</h3>
+                <p>Grouped posts by issue using TF-IDF + K-means (silhouette score ~0.51).</p>
+              </div>
+            </div>
+            <div class="approach-item">
+              <span class="approach-num">6</span>
+              <div>
+                <h3>Classification</h3>
+                <p>Trained 5 models, then combined the top 3 into a voting ensemble.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="case-section">
+          <h2><span class="section-mark">03</span> The Result</h2>
+          <div class="highlight-grid">
+            <div class="highlight-card">
+              <span class="highlight-label">Sentiment Split</span>
+              <h3><span class="stat-callout">40.6%</span> negative, <span class="stat-callout">36%</span> positive, <span class="stat-callout">23.4%</span> neutral</h3>
+              <p>The keyword override caught complaints VADER missed.</p>
+            </div>
+            <div class="highlight-card">
+              <span class="highlight-label">5 Clear Themes</span>
+              <h3>Flagging, mobile, trust, spam, and design</h3>
+              <p>Flagging frustration, mobile usability, listing trust, messaging spam, and platform design opinions.</p>
+            </div>
+            <div class="highlight-card">
+              <span class="highlight-label">Best Model</span>
+              <h3>Voting ensemble hit <span class="stat-callout">74%</span> accuracy and <span class="stat-callout">0.73</span> F1</h3>
+              <p>Beat any single model on its own.</p>
+            </div>
+            <div class="highlight-card gap">
+              <span class="highlight-label">Strong Recall</span>
+              <h3><span class="stat-callout">92%</span> recall on negative posts, <span class="stat-callout">88%</span> precision on neutral</h3>
+              <p>Reliable at catching complaints without drowning in false neutrals.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="case-section">
+          <h2><span class="section-mark">04</span> Business Impact</h2>
+          <div class="impact-list">
+            <div class="impact-item">
+              <span class="impact-dot" aria-hidden="true"></span>
+              <div>
+                <h3>Priority Fix</h3>
+                <p>Post flagging and moderation transparency — the biggest complaint cluster.</p>
+              </div>
+            </div>
+            <div class="impact-item">
+              <span class="impact-dot" aria-hidden="true"></span>
+              <div>
+                <h3>Mobile Review</h3>
+                <p>Usability complaints pointed to a dated mobile experience.</p>
+              </div>
+            </div>
+            <div class="impact-item">
+              <span class="impact-dot" aria-hidden="true"></span>
+              <div>
+                <h3>Spam Flag</h3>
+                <p>Isolated messaging spam as a fixable, standalone issue.</p>
+              </div>
+            </div>
+            <div class="impact-item">
+              <span class="impact-dot" aria-hidden="true"></span>
+              <div>
+                <h3>Reusable Tool</h3>
+                <p>Delivered the classifier so the team can auto-triage new posts going forward.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="case-section">
+          <h2><span class="section-mark">05</span> What I Learned</h2>
+          <div class="learn-quote">
+            <p>The keyword override mattered more than any modeling choice. Fixing one labeling issue improved everything downstream.</p>
+          </div>
+        </section>
+
+        <div class="case-footer">
+          <a href="../index.html#work" class="shadow-btn">← more projects</a>
+          <p class="case-footer-note">Craigslist · NLP &amp; Text Analytics</p>
+        </div>
+      </article>
+
+      <aside class="case-media case-media--wide" aria-label="Project screenshots">
+        <figure class="case-shot reveal">
+          <div class="browser-frame">
+            <div class="browser-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+            <img src="../images/work/craigslist/image-5.png" alt="Web scraping and cleaning pipeline for Craigslist forum posts" loading="eager">
+          </div>
+          <figcaption class="browser-caption">Web Scraping and Cleaning</figcaption>
+        </figure>
+
+        <figure class="case-shot reveal">
+          <div class="browser-frame">
+            <div class="browser-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+            <img src="../images/work/craigslist/image-2.jpg" alt="Five cluster word clouds showing recurring complaint themes" loading="lazy">
+          </div>
+          <figcaption class="browser-caption">The 5 cluster word clouds</figcaption>
+        </figure>
+
+        <div class="case-shot-pair">
+          <figure class="case-shot reveal">
+            <div class="browser-frame">
+              <div class="browser-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+              <img src="../images/work/craigslist/image-1.png" alt="Sentiment distribution pie chart" loading="lazy">
+            </div>
+            <figcaption class="browser-caption">Sentiment Distribution pie chart</figcaption>
+          </figure>
+
+          <figure class="case-shot reveal">
+            <div class="browser-frame">
+              <div class="browser-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+              <img src="../images/work/craigslist/image-4.png" alt="Model accuracy comparison table" loading="lazy">
+            </div>
+            <figcaption class="browser-caption">Model Accuracy Comparison table</figcaption>
+          </figure>
+        </div>
+
+        <figure class="case-shot case-shot--md reveal">
+          <div class="browser-frame">
+            <div class="browser-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+            <img src="../images/work/craigslist/image-3.png" alt="Confusion matrix for the voting ensemble classifier" loading="lazy">
+          </div>
+          <figcaption class="browser-caption">Confusion Matrix — Voting Ensemble</figcaption>
+        </figure>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    function toggleTheme(){
+      const h=document.documentElement;
+      h.setAttribute('data-theme',h.dataset.theme==='dark'?'light':'dark');
+      localStorage.setItem('theme',h.dataset.theme);
+    }
+    (function(){
+      const s=localStorage.getItem('theme');
+      if(s)document.documentElement.setAttribute('data-theme',s);
+    })();
+
+    const obs=new IntersectionObserver(es=>{
+      es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});
+    },{threshold:.08,rootMargin:'0px 0px -20px 0px'});
+    document.querySelectorAll('.reveal').forEach(e=>obs.observe(e));
+  </script>
+</body>
+</html>

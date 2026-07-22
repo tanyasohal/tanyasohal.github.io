@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grant Proposal AI — Tanya Sohal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;0,1000;1,400;1,700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="project.css">
+</head>
+<body>
+  <nav class="nav" aria-label="Primary">
+    <a href="../index.html" class="nav-logo">tanya</a>
+    <div class="nav-actions">
+      <button class="theme-toggle" type="button" aria-label="Toggle dark mode" onclick="toggleTheme()"></button>
+    </div>
+  </nav>
+
+  <main class="case-page">
+    <h1 class="case-title">A Conversational AI Assistant for Grant Proposal Writing</h1>
+
+    <div class="case-intro">
+      <div class="case-tags">
+        <span class="case-tag">GenAI</span>
+        <span class="case-tag">API Calling</span>
+      </div>
+
+      <p class="case-subtitle">I built a prototype AI tool that drafts full grant proposals in seconds, for a non-profit’s conservation team that was losing time writing them by hand.</p>
+
+      <div class="tool-row" aria-label="Tools and concepts">
+        <span class="tool-chip">Python</span>
+        <span class="tool-chip">OpenAI API (GPT-4)</span>
+        <span class="tool-chip">Canva</span>
+        <span class="tool-chip">Prompt Engineering</span>
+      </div>
+    </div>
+
+    <div class="case-layout">
+      <article class="case-content">
+        <section class="case-section">
+          <h2><span class="section-mark">01</span> The Problem</h2>
+          <p>A non-profit’s conservation team depended on grants but spent huge amounts of time hand-writing proposals customized to each funder, slowing them down enough to miss deadlines.</p>
+        </section>
+
+        <section class="case-section">
+          <h2><span class="section-mark">02</span> The Approach</h2>
+          <div class="approach-list">
+            <div class="approach-item">
+              <span class="approach-num">1</span>
+              <div>
+                <h3>Proposal Structure</h3>
+                <p>Mapped out the 5 sections every strong proposal needs.</p>
+              </div>
+            </div>
+            <div class="approach-item">
+              <span class="approach-num">2</span>
+              <div>
+                <h3>Prompt Design</h3>
+                <p>Built one structured prompt that has GPT-4 fill all 5 sections from just a few inputs (name, objectives, timeline, budget, focus area).</p>
+              </div>
+            </div>
+            <div class="approach-item">
+              <span class="approach-num">3</span>
+              <div>
+                <h3>Prototype Build</h3>
+                <p>Built a working Python tool using the OpenAI API so staff could get a full draft from one input.</p>
+              </div>
+            </div>
+            <div class="approach-item">
+              <span class="approach-num">4</span>
+              <div>
+                <h3>Testing</h3>
+                <p>Ran it on a real example project to check the output made sense and had real numbers, not filler.</p>
+              </div>
+            </div>
+            <div class="approach-item">
+              <span class="approach-num">5</span>
+              <div>
+                <h3>Pitch Deck</h3>
+                <p>Packaged it into a slide deck for the department and board.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="case-section">
+          <h2><span class="section-mark">03</span> The Result</h2>
+          <div class="highlight-grid">
+            <div class="highlight-card">
+              <span class="highlight-label">Speed</span>
+              <h3>Full formatted proposal generated in under <span class="stat-callout">2 minutes</span></h3>
+              <p>From a short set of inputs to a complete draft.</p>
+            </div>
+            <div class="highlight-card">
+              <span class="highlight-label">Quality</span>
+              <h3>Specific goals, justified budgets, funder-appropriate tone</h3>
+              <p>Held up across repeat tests — real numbers, not filler.</p>
+            </div>
+            <div class="highlight-card gap">
+              <span class="highlight-label">Time Saved</span>
+              <h3>Estimated <span class="stat-callout">80%</span> cut in drafting time</h3>
+              <p>Hours of writing compressed into a short generation loop.</p>
+            </div>
+            <div class="highlight-card">
+              <span class="highlight-label">Expert Feedback</span>
+              <h3>University grant writers reviewed the output and liked it</h3>
+              <p>Outside review helped validate the prototype wasn’t just flashy.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="case-section">
+          <h2><span class="section-mark">04</span> Business Impact</h2>
+          <div class="impact-list">
+            <div class="impact-item">
+              <span class="impact-dot" aria-hidden="true"></span>
+              <div>
+                <h3>Time Back</h3>
+                <p>Frees staff for actual conservation work.</p>
+              </div>
+            </div>
+            <div class="impact-item">
+              <span class="impact-dot" aria-hidden="true"></span>
+              <div>
+                <h3>No Consultants</h3>
+                <p>Removes need to hire outside grant writers.</p>
+              </div>
+            </div>
+            <div class="impact-item">
+              <span class="impact-dot" aria-hidden="true"></span>
+              <div>
+                <h3>More Funding Shots</h3>
+                <p>Faster process means more grants applied for — estimated up to <span class="stat-callout">50%</span> more funding.</p>
+              </div>
+            </div>
+            <div class="impact-item">
+              <span class="impact-dot" aria-hidden="true"></span>
+              <div>
+                <h3>Consistency</h3>
+                <p>Quality doesn’t depend on one staffer’s bandwidth that week.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="case-section">
+          <h2><span class="section-mark">05</span> What I Learned</h2>
+          <div class="learn-quote">
+            <p>Output quality lived and died on how specific my prompt was. A vague prompt gave a vague proposal.</p>
+          </div>
+        </section>
+
+        <section class="case-section">
+          <h2><span class="section-mark">06</span> What’s Next</h2>
+          <p>Give it a real interface so non-technical staff can use it without touching code.</p>
+        </section>
+
+        <div class="case-footer">
+          <a href="../index.html#work" class="shadow-btn">← more projects</a>
+          <p class="case-footer-note">Grant Writer · GenAI</p>
+        </div>
+      </article>
+
+      <aside class="case-media case-media--wide" aria-label="Project screenshots">
+        <figure class="case-shot reveal">
+          <div class="browser-frame">
+            <div class="browser-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+            <img src="../images/work/grant-writer/image-1.png" alt="Connecting an OpenAI API key for the grant proposal tool" loading="eager">
+          </div>
+          <figcaption class="browser-caption">Connect API key</figcaption>
+        </figure>
+
+        <figure class="case-shot reveal">
+          <div class="browser-frame">
+            <div class="browser-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+            <img src="../images/work/grant-writer/image-2.png" alt="Python function that generates a grant proposal via GPT-4" loading="lazy">
+          </div>
+          <figcaption class="browser-caption">Function to generate proposal</figcaption>
+        </figure>
+
+        <figure class="case-shot case-shot--zoom reveal">
+          <div class="browser-frame">
+            <div class="browser-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+            <img src="../images/work/grant-writer/image-3.png" alt="Prototype demonstration of the grant proposal assistant" loading="lazy">
+          </div>
+          <figcaption class="browser-caption">Prototype Demonstration</figcaption>
+        </figure>
+
+        <figure class="case-shot case-shot--zoom reveal">
+          <div class="browser-frame">
+            <div class="browser-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+            <img src="../images/work/grant-writer/image-4.png" alt="Sample generated grant proposal output" loading="lazy">
+          </div>
+          <figcaption class="browser-caption">Generated Proposal</figcaption>
+        </figure>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    function toggleTheme(){
+      const h=document.documentElement;
+      h.setAttribute('data-theme',h.dataset.theme==='dark'?'light':'dark');
+      localStorage.setItem('theme',h.dataset.theme);
+    }
+    (function(){
+      const s=localStorage.getItem('theme');
+      if(s)document.documentElement.setAttribute('data-theme',s);
+    })();
+
+    const obs=new IntersectionObserver(es=>{
+      es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});
+    },{threshold:.08,rootMargin:'0px 0px -20px 0px'});
+    document.querySelectorAll('.reveal').forEach(e=>obs.observe(e));
+  </script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OneUp Analytics — Tanya Sohal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;0,1000;1,400;1,700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="project.css">
+</head>
+<body>
+  <nav class="nav" aria-label="Primary">
+    <a href="../index.html" class="nav-logo">tanya</a>
+    <div class="nav-actions">
+      <button class="theme-toggle" type="button" aria-label="Toggle dark mode" onclick="toggleTheme()"></button>
+    </div>
+  </nav>
+
+  <main class="case-page">
+    <h1 class="case-title">Real-Time User Behavior Tracking for OneUp, an Edtech Startup</h1>
+
+    <div class="case-intro">
+      <div class="case-tags">
+        <span class="case-tag">Product Analytics</span>
+        <span class="case-tag">Business Intelligence</span>
+      </div>
+
+      <p class="case-subtitle">I built and deployed a live analytics platform that turned raw product data into a dashboard the founders use regularly to check cohort performance and engagement.</p>
+
+      <div class="tool-row" aria-label="Tools and concepts">
+        <span class="tool-chip">PostgreSQL</span>
+        <span class="tool-chip">Metabase</span>
+        <span class="tool-chip">AWS EC2</span>
+        <span class="tool-chip">AWS RDS</span>
+        <span class="tool-chip">Docker</span>
+        <span class="tool-chip">CTEs</span>
+        <span class="tool-chip">Window Functions</span>
+        <span class="tool-chip">Data Validation</span>
+      </div>
+    </div>
+
+    <div class="case-layout">
+      <article class="case-content">
+        <section class="case-section">
+          <h2><span class="section-mark">01</span> The Problem</h2>
+          <p><a href="https://www.getoneup.co/" class="inline-link" target="_blank" rel="noopener noreferrer">OneUp</a> is a pre-revenue startup building a text-message-based coaching platform for teenagers. The founders had product data sitting in a production database, but no way to actually see how their beta cohorts were engaging with the product.</p>
+          <p>Every question about user behavior meant someone manually querying the database and reporting back. There was no live view, no way to track trends over time, and no way to catch problems as they happened.</p>
+        </section>
+
+        <section class="case-section">
+          <h2><span class="section-mark">02</span> The Approach</h2>
+          <div class="approach-list">
+            <div class="approach-item">
+              <span class="approach-num">1</span>
+              <div>
+                <h3>Data Mapping</h3>
+                <p>Connected to the production database and mapped tables for users, check-ins, and coaching stages.</p>
+              </div>
+            </div>
+            <div class="approach-item">
+              <span class="approach-num">2</span>
+              <div>
+                <h3>SQL Logic</h3>
+                <p>Wrote all underlying queries using CTEs and <code>generate_series</code> to calculate expected activity per user.</p>
+              </div>
+            </div>
+            <div class="approach-item">
+              <span class="approach-num">3</span>
+              <div>
+                <h3>Dashboard Build</h3>
+                <p>Built two cohort dashboards covering enrollment, activation, engagement trends, and behavioral growth.</p>
+              </div>
+            </div>
+            <div class="approach-item">
+              <span class="approach-num">4</span>
+              <div>
+                <h3>Deployment</h3>
+                <p>Deployed Metabase on AWS EC2 on a custom subdomain so the team didn’t need database access.</p>
+              </div>
+            </div>
+            <div class="approach-item">
+              <span class="approach-num">5</span>
+              <div>
+                <h3>Team Access</h3>
+                <p>Migrated the local build to the live server and set up individual logins.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="case-section">
+          <h2><span class="section-mark">03</span> The Result</h2>
+          <div class="highlight-grid">
+            <div class="highlight-card">
+              <span class="highlight-label">Live Tracking</span>
+              <h3>Two dashboards tracking real cohorts across <span class="stat-callout">10+ metrics</span></h3>
+              <p>Enrollment, activation, engagement trends, and behavioral growth — all in one place the team could open anytime.</p>
+            </div>
+            <div class="highlight-card bug">
+              <span class="highlight-label">Bug Fix #1</span>
+              <h3>Completion rates over 100%</h3>
+              <p>Found and fixed a mismatched date range that was inflating completion metrics.</p>
+            </div>
+            <div class="highlight-card bug">
+              <span class="highlight-label">Bug Fix #2</span>
+              <h3>Duplicate profile records</h3>
+              <p>Traced skew to duplicate user profiles, then rebuilt the calc to use actual first activity instead of a stored date.</p>
+            </div>
+            <div class="highlight-card gap">
+              <span class="highlight-label">Real Gap Found</span>
+              <h3>One cohort completed ~<span class="stat-callout">78%</span> of check-ins; another ranged <span class="stat-callout">23–64%</span></h3>
+              <p>A difference worth flagging directly — not a vague “engagement feels low.”</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="case-section">
+          <h2><span class="section-mark">04</span> Business Impact</h2>
+          <div class="impact-list">
+            <div class="impact-item">
+              <span class="impact-dot" aria-hidden="true"></span>
+              <div>
+                <h3>Self-Serve Data</h3>
+                <p>Founders check real numbers without asking for a report.</p>
+              </div>
+            </div>
+            <div class="impact-item">
+              <span class="impact-dot" aria-hidden="true"></span>
+              <div>
+                <h3>Turned a Hunch into a Number</h3>
+                <p>“Some students seem less engaged” became a specific, verified gap.</p>
+              </div>
+            </div>
+            <div class="impact-item">
+              <span class="impact-dot" aria-hidden="true"></span>
+              <div>
+                <h3>Caught Bad Data Early</h3>
+                <p>Fixed two accuracy bugs before they led to a wrong call.</p>
+              </div>
+            </div>
+            <div class="impact-item">
+              <span class="impact-dot" aria-hidden="true"></span>
+              <div>
+                <h3>Cohort Comparison</h3>
+                <p>Made it possible to compare cohorts for the first time.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="case-section">
+          <h2><span class="section-mark">05</span> What I Learned</h2>
+          <div class="learn-quote">
+            <p>This was my first time deploying something live, not just analyzing data in a notebook. I picked up Metabase and Docker on the fly and set up a custom subdomain so the team could reach it without needing AWS access.</p>
+          </div>
+        </section>
+
+        <div class="case-footer">
+          <a href="../index.html#work" class="shadow-btn">← more projects</a>
+          <p class="case-footer-note">OneUp · Product Analytics</p>
+        </div>
+      </article>
+
+      <aside class="case-media" aria-label="Project screenshots">
+        <figure class="case-shot reveal">
+          <div class="browser-frame">
+            <div class="browser-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+            <img src="../images/work/oneup/dashboard-1.jpg" alt="June 2026 HS Cohort Dashboard — cohort snapshot, engagement by student, and missed days" loading="eager">
+          </div>
+          <figcaption class="browser-caption">Cohort snapshot &amp; week-over-week engagement</figcaption>
+        </figure>
+
+        <figure class="case-shot reveal">
+          <div class="browser-frame">
+            <div class="browser-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+            <img src="../images/work/oneup/dashboard-2.jpg" alt="Engagement across the week, reminder nudges, and behavioral growth metrics" loading="lazy">
+          </div>
+          <figcaption class="browser-caption">Weekly patterns &amp; behavioral growth</figcaption>
+        </figure>
+
+        <figure class="case-shot reveal">
+          <div class="browser-frame">
+            <div class="browser-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+            <img src="../images/work/oneup/sql-query.jpg" alt="PostgreSQL query using CTEs and generate_series for check-in completion rate" loading="lazy">
+          </div>
+          <figcaption class="browser-caption">SQL behind check-in completion rate</figcaption>
+        </figure>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    function toggleTheme(){
+      const h=document.documentElement;
+      h.setAttribute('data-theme',h.dataset.theme==='dark'?'light':'dark');
+      localStorage.setItem('theme',h.dataset.theme);
+    }
+    (function(){
+      const s=localStorage.getItem('theme');
+      if(s)document.documentElement.setAttribute('data-theme',s);
+    })();
+
+    const obs=new IntersectionObserver(es=>{
+      es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});
+    },{threshold:.08,rootMargin:'0px 0px -20px 0px'});
+    document.querySelectorAll('.reveal').forEach(e=>obs.observe(e));
+  </script>
+</body>
+</html>

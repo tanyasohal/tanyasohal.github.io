@@ -1,0 +1,15 @@
+{
+  "name": "tanya_portfolio",
+  "version": "1.0.0",
+  "description": "Personal portfolio site",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:update": "playwright test --update-snapshots",
+    "test:report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.1"
+  }
+}

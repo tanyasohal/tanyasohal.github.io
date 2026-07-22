@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perry’s Ice Cream — Tanya Sohal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;0,1000;1,400;1,700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="project.css">
+</head>
+<body>
+  <nav class="nav" aria-label="Primary">
+    <a href="../index.html" class="nav-logo">tanya</a>
+    <div class="nav-actions">
+      <button class="theme-toggle" type="button" aria-label="Toggle dark mode" onclick="toggleTheme()"></button>
+    </div>
+  </nav>
+
+  <main class="case-page">
+    <h1 class="case-title">Manufacturing Optimization for Perry’s Ice Cream</h1>
+
+    <div class="case-intro">
+      <div class="case-tags">
+        <span class="case-tag">Manufacturing Analytics</span>
+        <span class="case-tag">Operations Analytics</span>
+      </div>
+
+      <p class="case-subtitle">I analyzed a year of production data to find where a plant was losing capacity, then built a model to simulate how much faster each line could safely run.</p>
+
+      <div class="tool-row" aria-label="Tools and concepts">
+        <span class="tool-chip">Python</span>
+        <span class="tool-chip">Excel</span>
+        <span class="tool-chip">Regression</span>
+        <span class="tool-chip">Time Series Analysis</span>
+        <span class="tool-chip">K-Means Clustering</span>
+        <span class="tool-chip">XGBoost</span>
+        <span class="tool-chip">Simulation</span>
+      </div>
+    </div>
+
+    <div class="case-layout case-layout--fill">
+      <article class="case-content">
+        <section class="case-section">
+          <h2><span class="section-mark">01</span> The Problem</h2>
+          <p><a href="https://www.perrysicecream.com/" class="inline-link" target="_blank" rel="noopener noreferrer">Perry’s Ice Cream</a> runs seven production lines, each producing dozens of different products, and nobody had a clear picture of where the plant was losing capacity. Years of run logs and checkweight data existed, but only as raw, disconnected records. Leadership wanted one answer: how can we produce more ice cream with the same equipment, people, and hours?</p>
+        </section>
+
+        <section class="case-section">
+          <h2><span class="section-mark">02</span> The Approach</h2>
+          <div class="approach-list">
+            <div class="approach-item">
+              <span class="approach-num">1</span>
+              <div>
+                <h3>Core Question</h3>
+                <p>Framed the whole project around one question: capacity-constrained, or losing output to fixable problems?</p>
+              </div>
+            </div>
+            <div class="approach-item">
+              <span class="approach-num">2</span>
+              <div>
+                <h3>Data Cleaning</h3>
+                <p>Merged run logs and checkweight records across all 7 lines.</p>
+              </div>
+            </div>
+            <div class="approach-item">
+              <span class="approach-num">3</span>
+              <div>
+                <h3>True Speed Model</h3>
+                <p>Built a regression model isolating each line’s real mechanical speed from downtime noise (91% accuracy).</p>
+              </div>
+            </div>
+            <div class="approach-item">
+              <span class="approach-num">4</span>
+              <div>
+                <h3>Time Series Check</h3>
+                <p>Converted logs into hourly data to catch unexplained speed drops.</p>
+              </div>
+            </div>
+            <div class="approach-item">
+              <span class="approach-num">5</span>
+              <div>
+                <h3>Product Clustering</h3>
+                <p>Grouped 74 products into 4 clusters by speed, uptime, and weight.</p>
+              </div>
+            </div>
+            <div class="approach-item">
+              <span class="approach-num">6</span>
+              <div>
+                <h3>Speed Simulation</h3>
+                <p>Simulated throughput at different speeds to find each line’s true optimal point.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="case-section">
+          <h2><span class="section-mark">03</span> The Result</h2>
+          <div class="highlight-grid">
+            <div class="highlight-card">
+              <span class="highlight-label">Headroom Found</span>
+              <h3>All 7 lines ran below optimal speed, by <span class="stat-callout">16%</span> to <span class="stat-callout">31%</span></h3>
+              <p>Every line had unused speed capacity waiting to be unlocked.</p>
+            </div>
+            <div class="highlight-card gap">
+              <span class="highlight-label">Output Gain</span>
+              <h3>Simulated speed fixes lifted output from <span class="stat-callout">34.3M</span> to <span class="stat-callout">41.7M</span> units</h3>
+              <p>Almost no added downtime in the simulation.</p>
+            </div>
+            <div class="highlight-card">
+              <span class="highlight-label">Real Bottleneck</span>
+              <h3>Downtime, not slow speed, was the actual constraint</h3>
+              <p>The “run faster” story wasn’t the full picture.</p>
+            </div>
+            <div class="highlight-card bug">
+              <span class="highlight-label">Fixable Issues</span>
+              <h3>Line 1200 startup loss &amp; Line 1201 midweek dip</h3>
+              <p>A slow startup on Line 1200 (<span class="stat-callout">6.7%</span> loss) and an unexplained Tuesday/Friday slowdown on Line 1201.</p>
+            </div>
+            <div class="highlight-card">
+              <span class="highlight-label">Weight, Not Machines</span>
+              <h3>Heavier products explained most speed differences</h3>
+              <p>Not the lines themselves — product weight drove the gaps.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="case-section">
+          <h2><span class="section-mark">04</span> Business Impact</h2>
+          <div class="impact-list">
+            <div class="impact-item">
+              <span class="impact-dot" aria-hidden="true"></span>
+              <div>
+                <h3>Targeted Fixes</h3>
+                <p>Recommended line-specific speed changes instead of a blanket increase.</p>
+              </div>
+            </div>
+            <div class="impact-item">
+              <span class="impact-dot" aria-hidden="true"></span>
+              <div>
+                <h3>SOP Audit</h3>
+                <p>Flagged Line 1200’s startup process.</p>
+              </div>
+            </div>
+            <div class="impact-item">
+              <span class="impact-dot" aria-hidden="true"></span>
+              <div>
+                <h3>Investigate Pattern</h3>
+                <p>Flagged the recurring Line 1201 slowdown.</p>
+              </div>
+            </div>
+            <div class="impact-item">
+              <span class="impact-dot" aria-hidden="true"></span>
+              <div>
+                <h3>Maintenance Leads</h3>
+                <p>Gave exact timestamps of speed drops on Line 900.</p>
+              </div>
+            </div>
+            <div class="impact-item">
+              <span class="impact-dot" aria-hidden="true"></span>
+              <div>
+                <h3>Scheduling Tool</h3>
+                <p>Delivered the product-cluster map in Excel for supervisors.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="case-section">
+          <h2><span class="section-mark">05</span> What I Learned</h2>
+          <div class="learn-quote">
+            <p>I expected “faster machines” to be the answer. The data showed the real opportunity was cutting idle time, not raw speed.</p>
+          </div>
+        </section>
+
+        <div class="case-footer">
+          <a href="../index.html#work" class="shadow-btn">← more projects</a>
+          <p class="case-footer-note">Perry’s · Operations Analytics</p>
+        </div>
+      </article>
+
+      <aside class="case-media case-media--wide case-media--fill" aria-label="Project screenshots" data-fit-media>
+        <figure class="case-shot reveal" data-fit-poster>
+          <div class="browser-frame">
+            <div class="browser-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+            <img src="../images/work/perrys/image-1.jpg" alt="Project Boost infographic summarizing Perry’s manufacturing optimization findings" loading="eager">
+          </div>
+          <figcaption class="browser-caption">The infographic poster</figcaption>
+        </figure>
+
+        <div class="case-media-stack" data-fit-stack>
+          <figure class="case-shot case-shot--md reveal" data-fit-item>
+            <div class="browser-frame">
+              <div class="browser-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+              <img src="../images/work/perrys/image-2.jpg" alt="SKU clusters by speed and uptime scatter plot" loading="lazy">
+            </div>
+            <figcaption class="browser-caption">SKU Clusters by Speed and Uptime</figcaption>
+          </figure>
+
+          <figure class="case-shot case-shot--md reveal" data-fit-item>
+            <div class="browser-frame">
+              <div class="browser-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+              <img src="../images/work/perrys/image-3.jpg" alt="Uptime versus speed efficiency scatter plot" loading="lazy">
+            </div>
+            <figcaption class="browser-caption">Uptime vs Speed Efficiency</figcaption>
+          </figure>
+
+          <figure class="case-shot reveal" data-fit-item>
+            <div class="browser-frame">
+              <div class="browser-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+              <img src="../images/work/perrys/image-4.jpg" alt="Optimal speed simulation curve for WorkCenter 900" loading="lazy">
+            </div>
+            <figcaption class="browser-caption">Optimal Speed Simulation — WorkCenter 900</figcaption>
+          </figure>
+
+          <figure class="case-shot reveal" data-fit-item>
+            <div class="browser-frame">
+              <div class="browser-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+              <img src="../images/work/perrys/image-5.jpg" alt="Overall summary table of line optimization results" loading="lazy">
+            </div>
+            <figcaption class="browser-caption">Overall Summary Table</figcaption>
+          </figure>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    function toggleTheme(){
+      const h=document.documentElement;
+      h.setAttribute('data-theme',h.dataset.theme==='dark'?'light':'dark');
+      localStorage.setItem('theme',h.dataset.theme);
+    }
+    (function(){
+      const s=localStorage.getItem('theme');
+      if(s)document.documentElement.setAttribute('data-theme',s);
+    })();
+
+    const obs=new IntersectionObserver(es=>{
+      es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});
+    },{threshold:.08,rootMargin:'0px 0px -20px 0px'});
+    document.querySelectorAll('.reveal').forEach(e=>obs.observe(e));
+
+    (function fitMediaToText(){
+      const media=document.querySelector('[data-fit-media]');
+      const layout=document.querySelector('.case-layout--fill');
+      const content=layout&&layout.querySelector('.case-content');
+      const stack=media&&media.querySelector('[data-fit-stack]');
+      if(!media||!content||!stack)return;
+
+      function resetFit(){
+        media.classList.remove('is-fitted');
+        media.style.height='';
+        media.style.maxHeight='';
+        stack.style.transform='';
+        stack.style.marginBottom='';
+      }
+
+      function applyFit(){
+        if(window.matchMedia('(max-width:960px)').matches){
+          resetFit();
+          return;
+        }
+
+        resetFit();
+
+        const imgs=[...media.querySelectorAll('img')];
+        const ready=Promise.all(imgs.map(img=>{
+          if(img.complete)return Promise.resolve();
+          return new Promise(res=>{
+            img.addEventListener('load',res,{once:true});
+            img.addEventListener('error',res,{once:true});
+          });
+        }));
+
+        ready.then(()=>{
+          requestAnimationFrame(()=>{
+            const target=content.offsetHeight;
+            const natural=media.offsetHeight;
+            if(natural>target){
+              const poster=media.querySelector('[data-fit-poster]');
+              const posterH=poster?poster.offsetHeight:0;
+              const gap=16;
+              const stackAvail=Math.max(120,target-posterH-gap);
+              const stackNatural=stack.offsetHeight;
+              const scale=Math.min(1,stackAvail/Math.max(1,stackNatural));
+              stack.style.transform='scale('+scale+')';
+              stack.style.marginBottom=((scale-1)*stackNatural)+'px';
+            }
+            media.style.height=target+'px';
+            media.style.maxHeight=target+'px';
+            media.classList.add('is-fitted');
+          });
+        });
+      }
+
+      applyFit();
+      window.addEventListener('resize',()=>{
+        clearTimeout(window.__fitMediaT);
+        window.__fitMediaT=setTimeout(applyFit,150);
+      });
+    })();
+  </script>
+</body>
+</html>

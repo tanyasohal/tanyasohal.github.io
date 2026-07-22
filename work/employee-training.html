@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Training Analytics — Tanya Sohal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;0,1000;1,400;1,700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="project.css">
+</head>
+<body>
+  <nav class="nav" aria-label="Primary">
+    <a href="../index.html" class="nav-logo">tanya</a>
+    <div class="nav-actions">
+      <button class="theme-toggle" type="button" aria-label="Toggle dark mode" onclick="toggleTheme()"></button>
+    </div>
+  </nav>
+
+  <main class="case-page">
+    <h1 class="case-title">Evaluating Employee Training Impact through Data Analytics</h1>
+
+    <div class="case-intro">
+      <div class="case-tags">
+        <span class="case-tag">People Analytics</span>
+      </div>
+
+      <p class="case-subtitle">I analyzed how course format, order, and employee motivation affect training results at a global logistics company, then ran an A/B test to see which of two new programs actually worked better.</p>
+
+      <div class="tool-row" aria-label="Tools and concepts">
+        <span class="tool-chip">Python</span>
+        <span class="tool-chip">Tableau</span>
+        <span class="tool-chip">Canva</span>
+        <span class="tool-chip">PCA</span>
+        <span class="tool-chip">K-Means Clustering</span>
+        <span class="tool-chip">A/B Testing</span>
+        <span class="tool-chip">Regression Analysis</span>
+        <span class="tool-chip">Chi-Square Testing</span>
+      </div>
+    </div>
+
+    <div class="case-layout case-layout--fill">
+      <article class="case-content">
+        <section class="case-section">
+          <h2><span class="section-mark">01</span> The Problem</h2>
+          <p>A logistics company ran training across four regions with no idea what was working — virtual vs in-person, course order, employee type, or which of two new programs to roll out. I set out to answer all four with data.</p>
+        </section>
+
+        <section class="case-section">
+          <h2><span class="section-mark">02</span> The Approach</h2>
+          <div class="approach-list">
+            <div class="approach-item">
+              <span class="approach-num">1</span>
+              <div>
+                <h3>Data Merging</h3>
+                <p>Combined 6 datasets (employees, enrollment, courses, offices) into one clean table using shared IDs.</p>
+              </div>
+            </div>
+            <div class="approach-item">
+              <span class="approach-num">2</span>
+              <div>
+                <h3>Employee Segmentation</h3>
+                <p>Ran PCA and K-means clustering on a 12-question survey to group employees by motivation type, then confirmed the groups were real with a chi-square test.</p>
+              </div>
+            </div>
+            <div class="approach-item">
+              <span class="approach-num">3</span>
+              <div>
+                <h3>Format &amp; Sequence Analysis</h3>
+                <p>Compared virtual vs in-person courses and tested which course order drove the biggest score gains.</p>
+              </div>
+            </div>
+            <div class="approach-item">
+              <span class="approach-num">4</span>
+              <div>
+                <h3>A/B Testing</h3>
+                <p>Ran a controlled test on 593 employees across 6 offices, using Difference-in-Differences regression to isolate the real effect of each program from noise.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="case-section">
+          <h2><span class="section-mark">03</span> The Result</h2>
+          <div class="highlight-grid">
+            <div class="highlight-card">
+              <span class="highlight-label">5 Motivation Types Found</span>
+              <h3>Collaborative Optimizers <span class="stat-callout">33%</span>, Efficiency Seekers <span class="stat-callout">25%</span>, Goal-Driven Achievers <span class="stat-callout">17%</span>, Process-Oriented Stabilizers <span class="stat-callout">13%</span>, Social-Growth Enthusiasts <span class="stat-callout">12%</span></h3>
+              <p>Unevenly spread by region (p &lt; 0.001).</p>
+            </div>
+            <div class="highlight-card">
+              <span class="highlight-label">Order Matters</span>
+              <h3>Moving one advanced course from first to last raised its score improvement from <span class="stat-callout">0.63</span> to <span class="stat-callout">0.74</span></h3>
+              <p>Sequence alone moved the needle — no new content required.</p>
+            </div>
+            <div class="highlight-card">
+              <span class="highlight-label">Virtual Holds Up</span>
+              <h3>Several core courses did just as well online as in person</h3>
+              <p>Format wasn’t the tradeoff leadership assumed.</p>
+            </div>
+            <div class="highlight-card gap">
+              <span class="highlight-label">Split A/B Result</span>
+              <h3>Program A +<span class="stat-callout">4.93%</span> on practical skills; Program B +<span class="stat-callout">1.73%</span> on proficiency</h3>
+              <p>Both beat the current program — on different outcomes.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="case-section">
+          <h2><span class="section-mark">04</span> Business Impact</h2>
+          <div class="impact-list">
+            <div class="impact-item">
+              <span class="impact-dot" aria-hidden="true"></span>
+              <div>
+                <h3>Personalized Plans</h3>
+                <p>Train by motivation type instead of one-size-fits-all.</p>
+              </div>
+            </div>
+            <div class="impact-item">
+              <span class="impact-dot" aria-hidden="true"></span>
+              <div>
+                <h3>Go Virtual</h3>
+                <p>Expand virtual courses since they don’t sacrifice results.</p>
+              </div>
+            </div>
+            <div class="impact-item">
+              <span class="impact-dot" aria-hidden="true"></span>
+              <div>
+                <h3>Program Rollout</h3>
+                <p>Program A for hands-on roles, Program B for knowledge-heavy roles.</p>
+              </div>
+            </div>
+            <div class="impact-item">
+              <span class="impact-dot" aria-hidden="true"></span>
+              <div>
+                <h3>Free Fix</h3>
+                <p>Reordering courses boosts results without new content spend.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="case-section">
+          <h2><span class="section-mark">05</span> What I Learned</h2>
+          <div class="learn-quote">
+            <p>Raw before/after numbers can lie. The DiD test taught me you need a real comparison group to know if a program actually caused the result.</p>
+          </div>
+        </section>
+
+        <div class="case-footer">
+          <a href="../index.html#work" class="shadow-btn">← more projects</a>
+          <p class="case-footer-note">Training Impact · People Analytics</p>
+        </div>
+      </article>
+
+      <aside class="case-media case-media--wide case-media--fill" aria-label="Project screenshots" data-fit-media>
+        <div class="case-media-stack" data-fit-stack>
+          <figure class="case-shot reveal" data-fit-item>
+            <div class="browser-frame">
+              <div class="browser-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+              <img src="../images/work/employee-training/image-1.jpg" alt="Connecting employee training datasets in Tableau" loading="eager">
+            </div>
+            <figcaption class="browser-caption">Connecting the Datasets in Tableau</figcaption>
+          </figure>
+
+          <figure class="case-shot reveal" data-fit-item>
+            <div class="browser-frame">
+              <div class="browser-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+              <img src="../images/work/employee-training/image-3.png" alt="Five employee motivation type clusters visualized" loading="lazy">
+            </div>
+            <figcaption class="browser-caption">The 5 Employee Motivation Types</figcaption>
+          </figure>
+
+          <figure class="case-shot case-shot--sm reveal" data-fit-item>
+            <div class="browser-frame">
+              <div class="browser-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+              <img src="../images/work/employee-training/image-4.jpg" alt="In-person versus virtual enrollment by course" loading="lazy">
+            </div>
+            <figcaption class="browser-caption">In-Person vs Virtual Enrollment by Course</figcaption>
+          </figure>
+
+          <figure class="case-shot case-shot--sm reveal" data-fit-item>
+            <div class="browser-frame">
+              <div class="browser-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+              <img src="../images/work/employee-training/image-6.jpg" alt="A/B test results using difference-in-differences" loading="lazy">
+            </div>
+            <figcaption class="browser-caption">A/B Test Results (Difference-in-Differences)</figcaption>
+          </figure>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    function toggleTheme(){
+      const h=document.documentElement;
+      h.setAttribute('data-theme',h.dataset.theme==='dark'?'light':'dark');
+      localStorage.setItem('theme',h.dataset.theme);
+    }
+    (function(){
+      const s=localStorage.getItem('theme');
+      if(s)document.documentElement.setAttribute('data-theme',s);
+    })();
+
+    const obs=new IntersectionObserver(es=>{
+      es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});
+    },{threshold:.08,rootMargin:'0px 0px -20px 0px'});
+    document.querySelectorAll('.reveal').forEach(e=>obs.observe(e));
+
+    (function fitMediaToText(){
+      const media=document.querySelector('[data-fit-media]');
+      const layout=document.querySelector('.case-layout--fill');
+      const content=layout&&layout.querySelector('.case-content');
+      const stack=media&&media.querySelector('[data-fit-stack]');
+      if(!media||!content||!stack)return;
+
+      function resetFit(){
+        media.classList.remove('is-fitted');
+        media.style.height='';
+        media.style.maxHeight='';
+        stack.style.transform='';
+        stack.style.marginBottom='';
+      }
+
+      function applyFit(){
+        if(window.matchMedia('(max-width:960px)').matches){
+          resetFit();
+          return;
+        }
+        resetFit();
+
+        const imgs=[...media.querySelectorAll('img')];
+        const ready=Promise.all(imgs.map(img=>{
+          if(img.complete)return Promise.resolve();
+          return new Promise(res=>{
+            img.addEventListener('load',res,{once:true});
+            img.addEventListener('error',res,{once:true});
+          });
+        }));
+
+        ready.then(()=>{
+          // double rAF so layout settles after images paint
+          requestAnimationFrame(()=>{
+            requestAnimationFrame(()=>{
+              const target=content.offsetHeight;
+              const stackNatural=stack.offsetHeight;
+              const mediaNatural=media.offsetHeight;
+              if(mediaNatural>target+2){
+                const scale=Math.min(1,target/Math.max(1,mediaNatural));
+                stack.style.transform='scale('+scale+')';
+                stack.style.marginBottom=((scale-1)*stackNatural)+'px';
+              }
+              media.style.height=target+'px';
+              media.style.maxHeight=target+'px';
+              media.classList.add('is-fitted');
+            });
+          });
+        });
+      }
+
+      applyFit();
+      window.addEventListener('resize',()=>{
+        clearTimeout(window.__fitMediaT);
+        window.__fitMediaT=setTimeout(applyFit,150);
+      });
+    })();
+  </script>
+</body>
+</html>
