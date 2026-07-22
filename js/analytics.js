@@ -142,7 +142,12 @@
     })(window, document, "clarity", "script", projectId);
   }
 
-  async function loadClarityFromSettings() {
+  async function loadClarity() {
+    // Prefer config (always available), then Settings in Supabase
+    if (cfg.clarityProjectId) {
+      injectClarity(cfg.clarityProjectId);
+      return;
+    }
     try {
       const { data } = await client
         .from("site_settings")
@@ -158,7 +163,7 @@
   // Boot
   trackPageview();
   bindTrackedClicks();
-  loadClarityFromSettings();
+  loadClarity();
 
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "hidden") sendTimeOnPage();

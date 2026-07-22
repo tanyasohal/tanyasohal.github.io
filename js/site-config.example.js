@@ -4,5 +4,6 @@
  */
 window.SITE_CONFIG = {
   supabaseUrl: "YOUR_SUPABASE_URL",
-  supabaseAnonKey: "YOUR_SUPABASE_ANON_KEY"
+  supabaseAnonKey: "YOUR_SUPABASE_ANON_KEY",
+  clarityProjectId: "YOUR_CLARITY_PROJECT_ID"
 };
