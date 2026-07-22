@@ -1,4 +1,35 @@
 (() => {
+  const OPT_OUT_KEY = "tp_analytics_off";
+
+  function readOptOut() {
+    try {
+      return localStorage.getItem(OPT_OUT_KEY) === "1";
+    } catch {
+      return false;
+    }
+  }
+
+  function setOptOut(on) {
+    try {
+      if (on) localStorage.setItem(OPT_OUT_KEY, "1");
+      else localStorage.removeItem(OPT_OUT_KEY);
+    } catch (_) {
+      /* ignore */
+    }
+  }
+
+  // One-time links: /?analytics=off  or  /?analytics=on
+  try {
+    const q = new URLSearchParams(window.location.search);
+    if (q.get("analytics") === "off") setOptOut(true);
+    if (q.get("analytics") === "on") setOptOut(false);
+  } catch (_) {
+    /* ignore */
+  }
+
+  // Owner browser: skip all tracking (pageviews, events, Clarity from this file)
+  if (readOptOut()) return;
+
   const cfg = window.SITE_CONFIG || {};
   const configured =
     cfg.supabaseUrl &&
@@ -86,18 +117,6 @@
       visitor_id: visitorId(),
       meta: { duration_sec: sec }
     };
-    // Prefer beacon so it still fires on tab close
-    try {
-      const url = `${cfg.supabaseUrl}/rest/v1/events`;
-      const body = JSON.stringify(payload);
-      if (navigator.sendBeacon) {
-        const blob = new Blob([body], { type: "application/json" });
-        // sendBeacon can't set Authorization headers reliably across browsers —
-        // fall through to fetch keepalive for Supabase.
-      }
-    } catch (_) {
-      /* ignore */
-    }
     fetch(`${cfg.supabaseUrl}/rest/v1/events`, {
       method: "POST",
       headers: {
@@ -119,7 +138,10 @@
         if (!el) return;
         const name = el.getAttribute("data-track");
         if (!name) return;
-        const label = el.getAttribute("data-track-label") || el.getAttribute("aria-label") || el.textContent.trim().slice(0, 80);
+        const label =
+          el.getAttribute("data-track-label") ||
+          el.getAttribute("aria-label") ||
+          el.textContent.trim().slice(0, 80);
         trackEvent(name, label);
       },
       true
@@ -143,7 +165,6 @@
   }
 
   async function loadClarity() {
-    // Prefer config (always available), then Settings in Supabase
     if (cfg.clarityProjectId) {
       injectClarity(cfg.clarityProjectId);
       return;
@@ -160,7 +181,6 @@
     }
   }
 
-  // Boot
   trackPageview();
   bindTrackedClicks();
   loadClarity();

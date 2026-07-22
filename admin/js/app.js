@@ -566,12 +566,42 @@
     $("#user-email").textContent = session.user.email || "";
     showScreen("app");
     setTab("overview");
+    refreshOptOutStatus();
     try {
       await Promise.all([loadContent(), loadProjects(), loadSettings(), loadAnalytics(), loadMedia()]);
     } catch (err) {
       console.error(err);
       showToast(err.message || "Failed to load admin data");
     }
+  }
+
+  const OPT_OUT_KEY = "tp_analytics_off";
+
+  function isOptedOut() {
+    try {
+      return localStorage.getItem(OPT_OUT_KEY) === "1";
+    } catch {
+      return false;
+    }
+  }
+
+  function setAnalyticsOptOut(on) {
+    try {
+      if (on) localStorage.setItem(OPT_OUT_KEY, "1");
+      else localStorage.removeItem(OPT_OUT_KEY);
+    } catch (_) {
+      /* ignore */
+    }
+    refreshOptOutStatus();
+    showToast(on ? "This browser is excluded" : "Tracking enabled again for this browser");
+  }
+
+  function refreshOptOutStatus() {
+    const el = $("#optout-status");
+    if (!el) return;
+    el.textContent = isOptedOut()
+      ? "Status: excluded — your visits on this browser are not counted."
+      : "Status: tracking on — your visits on this browser are counted.";
   }
 
   function wireEvents() {
@@ -654,6 +684,8 @@
     $("#change-password-btn").addEventListener("click", () =>
       changePassword().catch((err) => showToast(err.message))
     );
+    $("#optout-on-btn").addEventListener("click", () => setAnalyticsOptOut(true));
+    $("#optout-off-btn").addEventListener("click", () => setAnalyticsOptOut(false));
   }
 
   async function boot() {
