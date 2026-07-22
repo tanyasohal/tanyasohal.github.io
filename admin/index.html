@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Admin</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <!-- Setup needed -->
+  <section id="setup-screen" class="auth-screen hidden">
+    <div class="auth-card">
+      <h1>Connect Supabase</h1>
+      <p class="lede">Add your project URL and anon key to <code>admin/js/config.js</code>, then refresh.</p>
+      <div class="banner warn">
+        Copy from <code>admin/js/config.example.js</code>. Get values in Supabase → Project Settings → API.
+      </div>
+      <ol class="lede" style="padding-left:1.2rem;display:grid;gap:.4rem">
+        <li>Create a free Supabase project</li>
+        <li>Run <code>supabase/schema.sql</code> in the SQL Editor</li>
+        <li>Add yourself under Authentication → Users</li>
+        <li>Paste URL + anon key into config.js</li>
+      </ol>
+      <p class="muted" style="margin-top:1rem;font-size:.9rem">Full steps: <code>admin/README.md</code></p>
+    </div>
+  </section>
+
+  <!-- Login -->
+  <section id="login-screen" class="auth-screen hidden">
+    <form class="auth-card" id="login-form">
+      <h1>Portfolio Admin</h1>
+      <p class="lede">Sign in to edit content and view analytics.</p>
+      <div id="login-error" class="auth-error hidden"></div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+      </div>
+      <button class="btn btn-primary" type="submit" style="width:100%">Sign in</button>
+    </form>
+  </section>
+
+  <!-- App -->
+  <div id="app" class="app-shell hidden">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-name">tanya admin</div>
+        <div class="brand-sub">portfolio backend</div>
+      </div>
+      <nav class="nav-tabs" aria-label="Admin sections">
+        <button type="button" class="nav-tab active" data-tab="overview">Overview</button>
+        <button type="button" class="nav-tab" data-tab="content">Content</button>
+        <button type="button" class="nav-tab" data-tab="projects">Projects</button>
+        <button type="button" class="nav-tab" data-tab="media">Media</button>
+        <button type="button" class="nav-tab" data-tab="analytics">Analytics</button>
+        <button type="button" class="nav-tab" data-tab="settings">Settings</button>
+      </nav>
+      <div class="sidebar-foot">
+        <span class="email" id="user-email"></span>
+        <button type="button" class="btn btn-ghost" id="logout-btn" style="color:#fff;border-color:rgba(255,255,255,.25)">Log out</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <!-- Overview -->
+      <section class="tab-panel" data-panel="overview">
+        <div class="topbar">
+          <div>
+            <h2>Overview</h2>
+            <p>Traffic snapshot and quick links from your site tracker.</p>
+          </div>
+          <div class="topbar-actions">
+            <button type="button" class="btn btn-ghost" data-goto="projects">Edit featured work</button>
+            <a class="btn btn-primary" id="clarity-link" href="#" target="_blank" rel="noopener noreferrer">Open Clarity</a>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="stat-grid">
+            <div class="stat"><div class="label">Visitors · 7d</div><div class="value" id="stat-visitors-7">—</div></div>
+            <div class="stat"><div class="label">Visitors · 30d</div><div class="value" id="stat-visitors-30">—</div></div>
+            <div class="stat"><div class="label">Views today</div><div class="value" id="stat-views-today">—</div></div>
+            <div class="stat"><div class="label">Resume clicks · 7d</div><div class="value" id="stat-resume">—</div></div>
+            <div class="stat"><div class="label">Projects live</div><div class="value" id="stat-projects">—</div></div>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Top pages (7 days)</h3>
+          <div class="list" id="top-pages"><p class="empty">No pageview data yet. Open the portfolio homepage to start collecting.</p></div>
+        </div>
+        <div class="panel">
+          <h3>Top referrers (7 days)</h3>
+          <div class="list" id="top-referrers"><p class="empty">No referrer data yet.</p></div>
+        </div>
+      </section>
+
+      <!-- Content -->
+      <section class="tab-panel hidden" data-panel="content">
+        <div class="topbar">
+          <div>
+            <h2>Content</h2>
+            <p>Edit site copy. Save draft anytime; Publish pushes it live (once the public site reads Supabase).</p>
+          </div>
+          <div class="topbar-actions">
+            <button type="button" class="btn btn-ghost" id="save-draft-btn">Save draft</button>
+            <button type="button" class="btn btn-primary" id="publish-btn">Publish</button>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="section-tabs" id="content-section-tabs">
+            <button type="button" class="chip active" data-section="hero">Hero</button>
+            <button type="button" class="chip" data-section="about">About</button>
+            <button type="button" class="chip" data-section="skills">Skills</button>
+            <button type="button" class="chip" data-section="writing">Writing</button>
+            <button type="button" class="chip" data-section="contact">Contact</button>
+            <button type="button" class="chip" data-section="seo">SEO</button>
+          </div>
+
+          <div class="content-section" data-content="hero">
+            <div class="form-grid">
+              <div class="field"><label for="hero-greeting">Greeting</label><input id="hero-greeting"></div>
+              <div class="field"><label for="hero-headline">Headline HTML</label><textarea id="hero-headline" rows="4"></textarea></div>
+              <div class="field"><label for="hero-resume">Resume URL</label><input id="hero-resume" type="url"></div>
+            </div>
+          </div>
+
+          <div class="content-section hidden" data-content="about">
+            <div class="form-grid">
+              <div class="field"><label for="about-title">Title</label><input id="about-title"></div>
+              <div class="field"><label for="about-p1">Paragraph 1</label><textarea id="about-p1"></textarea></div>
+              <div class="field"><label for="about-p2">Paragraph 2</label><textarea id="about-p2"></textarea></div>
+              <div class="field"><label for="about-p3">Paragraph 3</label><textarea id="about-p3"></textarea></div>
+              <div class="field"><label for="about-photo">Photo URL</label><input id="about-photo"></div>
+            </div>
+          </div>
+
+          <div class="content-section hidden" data-content="skills">
+            <div class="form-grid">
+              <div class="field"><label for="skills-title">Title</label><input id="skills-title"></div>
+              <div class="field"><label for="skills-subtitle">Subtitle</label><textarea id="skills-subtitle" rows="2"></textarea></div>
+              <p class="muted">Category names &amp; tool icons stay in draft JSON for now. Full skill-grid editor comes with publish polish.</p>
+            </div>
+          </div>
+
+          <div class="content-section hidden" data-content="writing">
+            <div class="form-grid">
+              <div class="field"><label for="writing-title">Title</label><input id="writing-title"></div>
+              <div class="field"><label for="writing-subtitle">Subtitle</label><textarea id="writing-subtitle" rows="2"></textarea></div>
+              <div class="field"><label for="writing-url">Substack URL</label><input id="writing-url" type="url"></div>
+              <div class="field"><label for="writing-btn">Button label</label><input id="writing-btn"></div>
+            </div>
+          </div>
+
+          <div class="content-section hidden" data-content="contact">
+            <div class="form-grid">
+              <div class="field"><label for="contact-title">Title</label><input id="contact-title"></div>
+              <div class="field"><label for="contact-intro">Intro</label><textarea id="contact-intro" rows="2"></textarea></div>
+              <div class="field"><label for="contact-email">Email</label><input id="contact-email" type="email"></div>
+              <div class="field"><label for="contact-linkedin">LinkedIn URL</label><input id="contact-linkedin" type="url"></div>
+              <div class="field"><label for="contact-github">GitHub URL</label><input id="contact-github" type="url"></div>
+              <div class="field"><label for="contact-tableau">Tableau URL</label><input id="contact-tableau" type="url"></div>
+            </div>
+          </div>
+
+          <div class="content-section hidden" data-content="seo">
+            <div class="form-grid">
+              <div class="field"><label for="seo-title">Page title</label><input id="seo-title"></div>
+              <div class="field"><label for="seo-description">Meta description</label><textarea id="seo-description" rows="3"></textarea></div>
+              <div class="field"><label for="seo-og">OG image URL</label><input id="seo-og"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Projects -->
+      <section class="tab-panel hidden" data-panel="projects">
+        <div class="topbar">
+          <div>
+            <h2>Projects</h2>
+            <p>Featured Work cards — edit title, tag, thumbnail, link, and visibility.</p>
+          </div>
+          <div class="topbar-actions">
+            <button type="button" class="btn btn-ghost" id="reload-projects-btn">Reload</button>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="project-list" id="project-list"></div>
+        </div>
+        <div class="panel hidden" id="project-editor">
+          <h3 id="project-editor-title">Edit project</h3>
+          <input type="hidden" id="project-id">
+          <div class="form-grid">
+            <div class="field"><label for="project-title">Title</label><input id="project-title"></div>
+            <div class="field"><label for="project-tag">Tag</label><input id="project-tag"></div>
+            <div class="field"><label for="project-href">Detail page URL</label><input id="project-href"></div>
+            <div class="field"><label for="project-thumb">Thumbnail URL</label><input id="project-thumb"></div>
+            <div class="field"><label for="project-order">Sort order</label><input id="project-order" type="number" min="0"></div>
+            <div class="field">
+              <label for="project-visible">Visible</label>
+              <select id="project-visible">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-primary" id="save-project-btn">Save project</button>
+            <button type="button" class="btn btn-ghost" id="cancel-project-btn">Cancel</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Media -->
+      <section class="tab-panel hidden" data-panel="media">
+        <div class="topbar">
+          <div>
+            <h2>Media</h2>
+            <p>Upload images to Supabase Storage (<code>media</code> bucket). Copy the public URL into Content or Projects.</p>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="field">
+            <label for="media-file">Upload image</label>
+            <input id="media-file" type="file" accept="image/*">
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-primary" id="upload-media-btn">Upload</button>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Recent uploads</h3>
+          <div class="media-grid" id="media-grid"><p class="empty">No uploads yet.</p></div>
+        </div>
+      </section>
+
+      <!-- Analytics -->
+      <section class="tab-panel hidden" data-panel="analytics">
+        <div class="topbar">
+          <div>
+            <h2>Analytics</h2>
+            <p>Pageviews, click events, and approximate time on page from your live site. Heatmaps live in Clarity.</p>
+          </div>
+          <div class="topbar-actions">
+            <a class="btn btn-primary" id="clarity-link-analytics" href="#" target="_blank" rel="noopener noreferrer">Open Clarity</a>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="stat-grid">
+            <div class="stat"><div class="label">Page views · 7d</div><div class="value" id="an-views-7">—</div></div>
+            <div class="stat"><div class="label">Unique · 7d</div><div class="value" id="an-unique-7">—</div></div>
+            <div class="stat"><div class="label">Mobile share</div><div class="value" id="an-mobile">—</div></div>
+            <div class="stat"><div class="label">Desktop share</div><div class="value" id="an-desktop">—</div></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="stat-grid">
+            <div class="stat"><div class="label">Resume clicks · 7d</div><div class="value" id="an-resume">—</div></div>
+            <div class="stat"><div class="label">Email clicks · 7d</div><div class="value" id="an-email">—</div></div>
+            <div class="stat"><div class="label">Project clicks · 7d</div><div class="value" id="an-project">—</div></div>
+            <div class="stat"><div class="label">Avg time on page · 7d</div><div class="value" id="an-avg-time">—</div></div>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Top events (7 days)</h3>
+          <div class="list" id="top-events"><p class="empty">No events yet.</p></div>
+        </div>
+        <div class="panel">
+          <h3>Views by day</h3>
+          <div class="list" id="views-by-day"><p class="empty">No pageviews yet.</p></div>
+        </div>
+      </section>
+
+      <!-- Settings -->
+      <section class="tab-panel hidden" data-panel="settings">
+        <div class="topbar">
+          <div>
+            <h2>Settings</h2>
+            <p>Site URL, Clarity embed id + dashboard link, and account password.</p>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="form-grid">
+            <div class="field"><label for="settings-site-url">Live site URL</label><input id="settings-site-url" type="url" placeholder="https://yoursite.com"></div>
+            <div class="field">
+              <label for="settings-clarity-id">Clarity project ID</label>
+              <input id="settings-clarity-id" placeholder="e.g. abcdefghij" autocomplete="off">
+              <span class="muted" style="font-size:.82rem">From Clarity → Settings → Setup. This loads the tracking script on your site.</span>
+            </div>
+            <div class="field"><label for="settings-clarity">Clarity dashboard URL</label><input id="settings-clarity" type="url" placeholder="https://clarity.microsoft.com/projects/view/..."></div>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-primary" id="save-settings-btn">Save settings</button>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Change password</h3>
+          <div class="form-grid">
+            <div class="field"><label for="new-password">New password</label><input id="new-password" type="password" autocomplete="new-password"></div>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-ghost" id="change-password-btn">Update password</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

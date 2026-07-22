@@ -2,6 +2,8 @@ node_modules/
 .env
 .env.*
 !.env.example
+js/site-config.js
+admin/js/config.js
 /test-results/
 /playwright-report/
 /blob-report/
