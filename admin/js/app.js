@@ -140,25 +140,99 @@
     return next;
   }
 
+  function clarityDashboardUrl() {
+    if (settings.clarity_url) return settings.clarity_url;
+    const id = (settings.clarity_project_id || "").trim();
+    if (id) return `https://clarity.microsoft.com/projects/view/${id}`;
+    return "";
+  }
+
   function updateClarityLinks() {
-    ["#clarity-link", "#clarity-link-analytics"].forEach((sel) => {
-      const a = $(sel);
-      if (settings.clarity_url) {
-        a.href = settings.clarity_url;
-        a.target = "_blank";
-        a.rel = "noopener noreferrer";
-        a.textContent = "Open Clarity";
-        a.onclick = null;
+    const url = clarityDashboardUrl();
+    const pairs = [
+      ["#clarity-link", "#clarity-setup-btn"],
+      ["#clarity-link-analytics", "#clarity-setup-btn-analytics"]
+    ];
+    pairs.forEach(([openSel, setupSel]) => {
+      const openBtn = $(openSel);
+      const setupBtn = $(setupSel);
+      if (!openBtn) return;
+      if (url) {
+        openBtn.classList.remove("hidden");
+        openBtn.href = url;
+        openBtn.target = "_blank";
+        openBtn.rel = "noopener noreferrer";
+        openBtn.textContent = "Open Clarity";
+        openBtn.onclick = null;
+        if (setupBtn) setupBtn.classList.add("hidden");
       } else {
-        a.removeAttribute("href");
-        a.removeAttribute("target");
-        a.textContent = "Add Clarity in Settings";
-        a.onclick = (e) => {
-          e.preventDefault();
-          setTab("settings");
-        };
+        openBtn.classList.add("hidden");
+        openBtn.removeAttribute("href");
+        if (setupBtn) setupBtn.classList.remove("hidden");
       }
     });
+  }
+
+  const PAGE_LABELS = {
+    "/": "Home",
+    "/index.html": "Home",
+    "/work/oneup.html": "OneUp — user behavior tracking",
+    "/work/craigslist.html": "Craigslist — NLP pain points",
+    "/work/perrys.html": "Perry's Ice Cream — manufacturing",
+    "/work/dvd-warehouse.html": "DVD warehouse — data pipeline",
+    "/work/grant-writer.html": "Grant writer — AI assistant",
+    "/work/employee-training.html": "Employee training — impact"
+  };
+
+  function friendlyPageLabel(path) {
+    if (!path) return "Unknown page";
+    // Ignore local file:// style paths from opening HTML on your computer
+    if (path.includes("/Users/") || path.includes("\\Users\\") || path.startsWith("file:")) {
+      return null;
+    }
+    const clean = path.split("?")[0].split("#")[0];
+    if (PAGE_LABELS[clean]) return PAGE_LABELS[clean];
+    if (clean.endsWith("/") && PAGE_LABELS[clean.slice(0, -1)]) return PAGE_LABELS[clean.slice(0, -1)];
+    // /work/foo.html → readable fallback
+    const work = clean.match(/\/work\/([^/]+?)(?:\.html)?$/);
+    if (work) return `Case study: ${work[1].replace(/-/g, " ")}`;
+    return clean;
+  }
+
+  function friendlyReferrerLabel(ref) {
+    const raw = (ref || "direct").trim().toLowerCase() || "direct";
+    if (raw === "direct") return "Direct visit (typed URL or bookmark)";
+    if (raw === "internal") return "Already on your site (clicked another page)";
+    if (raw.includes("linkedin")) return "LinkedIn";
+    if (raw.includes("google.")) return "Google search";
+    if (raw.includes("github")) return "GitHub";
+    if (raw.includes("substack")) return "Substack";
+    if (raw.includes("twitter") || raw.includes("x.com")) return "X / Twitter";
+    return raw;
+  }
+
+  function renderRankedList(el, rows, key, labelFn) {
+    if (!rows.length) {
+      el.innerHTML = '<p class="empty">No data yet.</p>';
+      return;
+    }
+    const counts = new Map();
+    rows.forEach((r) => {
+      const label = labelFn ? labelFn(r[key]) : r[key] || "—";
+      if (!label) return;
+      counts.set(label, (counts.get(label) || 0) + 1);
+    });
+    const ranked = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8);
+    if (!ranked.length) {
+      el.innerHTML = '<p class="empty">No data yet.</p>';
+      return;
+    }
+    el.innerHTML = ranked
+      .map(
+        ([label, n]) =>
+          `<div class="list-row"><span>${escapeHtml(label)}</span><strong>${n}</strong></div>`
+      )
+      .join("");
   }
 
   async function loadContent() {
@@ -347,25 +421,6 @@
     return new Set(rows.map((r) => r.visitor_id).filter(Boolean)).size || rows.length;
   }
 
-  function renderRankedList(el, rows, key) {
-    if (!rows.length) {
-      el.innerHTML = '<p class="empty">No data yet.</p>';
-      return;
-    }
-    const counts = new Map();
-    rows.forEach((r) => {
-      const k = (r[key] || "direct").trim() || "direct";
-      counts.set(k, (counts.get(k) || 0) + 1);
-    });
-    const ranked = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8);
-    el.innerHTML = ranked
-      .map(
-        ([label, n]) =>
-          `<div class="list-row"><span>${escapeHtml(label)}</span><strong>${n}</strong></div>`
-      )
-      .join("");
-  }
-
   async function loadAnalytics() {
     const since30 = daysAgoISO(30);
     const since7Iso = daysAgoISO(7);
@@ -408,8 +463,8 @@
       $("#an-mobile").textContent = `${Math.round((mobile / denom) * 100)}%`;
       $("#an-desktop").textContent = `${Math.round((desktop / denom) * 100)}%`;
 
-      renderRankedList($("#top-pages"), last7, "path");
-      renderRankedList($("#top-referrers"), last7, "referrer");
+      renderRankedList($("#top-pages"), last7, "path", friendlyPageLabel);
+      renderRankedList($("#top-referrers"), last7, "referrer", friendlyReferrerLabel);
 
       const byDay = new Map();
       last7.forEach((r) => {

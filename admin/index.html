@@ -79,6 +79,7 @@
           <div class="topbar-actions">
             <button type="button" class="btn btn-ghost" data-goto="projects">Edit featured work</button>
             <a class="btn btn-primary" id="clarity-link" href="#" target="_blank" rel="noopener noreferrer">Open Clarity</a>
+            <button type="button" class="btn btn-ghost hidden" id="clarity-setup-btn" data-goto="settings">Set up Clarity</button>
           </div>
         </div>
         <div class="panel">
@@ -91,12 +92,14 @@
           </div>
         </div>
         <div class="panel">
-          <h3>Top pages (7 days)</h3>
+          <h3>Most visited pages</h3>
+          <p class="muted" style="margin:-.35rem 0 .75rem;font-size:.9rem">Which parts of your portfolio people opened most this week.</p>
           <div class="list" id="top-pages"><p class="empty">No pageview data yet. Open the portfolio homepage to start collecting.</p></div>
         </div>
         <div class="panel">
-          <h3>Top referrers (7 days)</h3>
-          <div class="list" id="top-referrers"><p class="empty">No referrer data yet.</p></div>
+          <h3>How people found you</h3>
+          <p class="muted" style="margin:-.35rem 0 .75rem;font-size:.9rem">Where visitors came from before landing on your site.</p>
+          <div class="list" id="top-referrers"><p class="empty">No traffic source data yet.</p></div>
         </div>
       </section>
 
@@ -248,6 +251,7 @@
           </div>
           <div class="topbar-actions">
             <a class="btn btn-primary" id="clarity-link-analytics" href="#" target="_blank" rel="noopener noreferrer">Open Clarity</a>
+            <button type="button" class="btn btn-ghost hidden" id="clarity-setup-btn-analytics" data-goto="settings">Set up Clarity</button>
           </div>
         </div>
         <div class="panel">
@@ -290,9 +294,12 @@
             <div class="field">
               <label for="settings-clarity-id">Clarity project ID</label>
               <input id="settings-clarity-id" placeholder="e.g. abcdefghij" autocomplete="off">
-              <span class="muted" style="font-size:.82rem">From Clarity → Settings → Setup. This loads the tracking script on your site.</span>
+              <span class="muted" style="font-size:.82rem">From Clarity → Settings → Setup. This loads heatmaps on your site and unlocks the Open Clarity button.</span>
             </div>
-            <div class="field"><label for="settings-clarity">Clarity dashboard URL</label><input id="settings-clarity" type="url" placeholder="https://clarity.microsoft.com/projects/view/..."></div>
+            <div class="field">
+              <label for="settings-clarity">Clarity dashboard URL (optional)</label>
+              <input id="settings-clarity" type="url" placeholder="Leave blank — we build it from the project ID">
+            </div>
           </div>
           <div class="form-actions">
             <button type="button" class="btn btn-primary" id="save-settings-btn">Save settings</button>
