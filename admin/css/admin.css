@@ -323,6 +323,44 @@ a {
   gap: 0.85rem;
 }
 
+.range-toggle {
+  display: inline-flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.chart-grid .panel {
+  margin-top: 0;
+}
+
+.chart-wrap {
+  position: relative;
+  width: 100%;
+  height: 280px;
+}
+
+.chart-wrap-sm {
+  height: 240px;
+}
+
+@media (max-width: 900px) {
+  .chart-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-wrap,
+  .chart-wrap-sm {
+    height: 220px;
+  }
+}
+
 .stat {
   background: #faf7fc;
   border: 1px solid var(--border);

@@ -247,36 +247,46 @@
         <div class="topbar">
           <div>
             <h2>Analytics</h2>
-            <p>Pageviews, click events, and approximate time on page from your live site. Heatmaps live in Clarity.</p>
+            <p>Traffic and click charts from your live site. Heatmaps live in Clarity.</p>
           </div>
           <div class="topbar-actions">
+            <div class="range-toggle" role="group" aria-label="Date range">
+              <button type="button" class="chip active" data-range="7">Last 7 days</button>
+              <button type="button" class="chip" data-range="30">Last 30 days</button>
+            </div>
             <a class="btn btn-primary" id="clarity-link-analytics" href="#" target="_blank" rel="noopener noreferrer">Open Clarity</a>
             <button type="button" class="btn btn-ghost hidden" id="clarity-setup-btn-analytics" data-goto="settings">Set up Clarity</button>
           </div>
         </div>
         <div class="panel">
           <div class="stat-grid">
-            <div class="stat"><div class="label">Page views · 7d</div><div class="value" id="an-views-7">—</div></div>
-            <div class="stat"><div class="label">Unique · 7d</div><div class="value" id="an-unique-7">—</div></div>
-            <div class="stat"><div class="label">Mobile share</div><div class="value" id="an-mobile">—</div></div>
-            <div class="stat"><div class="label">Desktop share</div><div class="value" id="an-desktop">—</div></div>
+            <div class="stat"><div class="label">Page views</div><div class="value" id="an-views">—</div></div>
+            <div class="stat"><div class="label">Unique visitors</div><div class="value" id="an-unique">—</div></div>
+            <div class="stat"><div class="label">Resume clicks</div><div class="value" id="an-resume">—</div></div>
+            <div class="stat"><div class="label">Avg time on page</div><div class="value" id="an-avg-time">—</div></div>
           </div>
         </div>
         <div class="panel">
-          <div class="stat-grid">
-            <div class="stat"><div class="label">Resume clicks · 7d</div><div class="value" id="an-resume">—</div></div>
-            <div class="stat"><div class="label">Email clicks · 7d</div><div class="value" id="an-email">—</div></div>
-            <div class="stat"><div class="label">Project clicks · 7d</div><div class="value" id="an-project">—</div></div>
-            <div class="stat"><div class="label">Avg time on page · 7d</div><div class="value" id="an-avg-time">—</div></div>
+          <h3>Page views over time</h3>
+          <div class="chart-wrap"><canvas id="chart-views" aria-label="Page views over time"></canvas></div>
+        </div>
+        <div class="chart-grid">
+          <div class="panel">
+            <h3>Most visited pages</h3>
+            <div class="chart-wrap chart-wrap-sm"><canvas id="chart-pages" aria-label="Top pages"></canvas></div>
           </div>
-        </div>
-        <div class="panel">
-          <h3>Top events (7 days)</h3>
-          <div class="list" id="top-events"><p class="empty">No events yet.</p></div>
-        </div>
-        <div class="panel">
-          <h3>Views by day</h3>
-          <div class="list" id="views-by-day"><p class="empty">No pageviews yet.</p></div>
+          <div class="panel">
+            <h3>How people found you</h3>
+            <div class="chart-wrap chart-wrap-sm"><canvas id="chart-sources" aria-label="Traffic sources"></canvas></div>
+          </div>
+          <div class="panel">
+            <h3>Key clicks</h3>
+            <div class="chart-wrap chart-wrap-sm"><canvas id="chart-clicks" aria-label="Click events"></canvas></div>
+          </div>
+          <div class="panel">
+            <h3>Devices</h3>
+            <div class="chart-wrap chart-wrap-sm"><canvas id="chart-devices" aria-label="Devices"></canvas></div>
+          </div>
         </div>
       </section>
 
@@ -333,6 +343,7 @@
   <div id="toast" class="toast" role="status"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
   <script src="js/config.js"></script>
   <script src="js/app.js"></script>
 </body>

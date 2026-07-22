@@ -39,6 +39,10 @@
     $$(".tab-panel").forEach((panel) => {
       panel.classList.toggle("hidden", panel.dataset.panel !== tab);
     });
+    if (tab === "analytics") {
+      // Charts need a visible container to size correctly
+      requestAnimationFrame(() => applyAnalyticsRange());
+    }
   }
 
   function setContentSection(section) {
@@ -421,10 +425,285 @@
     return new Set(rows.map((r) => r.visitor_id).filter(Boolean)).size || rows.length;
   }
 
+  let analyticsRangeDays = 7;
+  let analyticsCache = { pageviews: [], events: [] };
+  const chartInstances = {};
+
+  const CHART_COLORS = {
+    purple: "#AE84D7",
+    purpleSoft: "rgba(174, 132, 215, 0.35)",
+    coral: "#F28B7D",
+    teal: "#67D5B5",
+    pink: "#F2A7C3",
+    amber: "#F4A261",
+    text: "#2c2435",
+    muted: "#6b6175",
+    grid: "rgba(108, 97, 117, 0.12)"
+  };
+
+  function destroyChart(key) {
+    if (chartInstances[key]) {
+      chartInstances[key].destroy();
+      delete chartInstances[key];
+    }
+  }
+
+  function upsertChart(key, canvas, config) {
+    if (!canvas || typeof Chart === "undefined") return;
+    destroyChart(key);
+    chartInstances[key] = new Chart(canvas, config);
+  }
+
+  function dayKeys(days) {
+    const keys = [];
+    for (let i = days - 1; i >= 0; i--) {
+      const d = new Date();
+      d.setHours(0, 0, 0, 0);
+      d.setDate(d.getDate() - i);
+      keys.push(d.toISOString().slice(0, 10));
+    }
+    return keys;
+  }
+
+  function countMap(rows, keyFn) {
+    const map = new Map();
+    rows.forEach((r) => {
+      const label = keyFn(r);
+      if (!label) return;
+      map.set(label, (map.get(label) || 0) + 1);
+    });
+    return [...map.entries()].sort((a, b) => b[1] - a[1]);
+  }
+
+  function formatAvgTime(events) {
+    const times = events
+      .filter((e) => e.name === "page_time")
+      .map((e) => Number(e.meta && e.meta.duration_sec))
+      .filter((n) => Number.isFinite(n) && n > 0);
+    if (!times.length) return "—";
+    const avg = Math.round(times.reduce((a, b) => a + b, 0) / times.length);
+    const mins = Math.floor(avg / 60);
+    const secs = avg % 60;
+    return mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+  }
+
+  function clickLabel(name) {
+    const map = {
+      resume_click: "Resume",
+      email_click: "Email",
+      linkedin_click: "LinkedIn",
+      github_click: "GitHub",
+      tableau_click: "Tableau",
+      substack_click: "Substack",
+      project_click: "Project cards"
+    };
+    return map[name] || name;
+  }
+
+  function renderAnalyticsCharts(pageviews, events) {
+    const days = dayKeys(analyticsRangeDays);
+    const viewsByDay = days.map((day) => pageviews.filter((r) => r.created_at.slice(0, 10) === day).length);
+
+    upsertChart("views", $("#chart-views"), {
+      type: "line",
+      data: {
+        labels: days.map((d) => d.slice(5)),
+        datasets: [
+          {
+            label: "Page views",
+            data: viewsByDay,
+            borderColor: CHART_COLORS.purple,
+            backgroundColor: CHART_COLORS.purpleSoft,
+            fill: true,
+            tension: 0.35,
+            pointRadius: 3,
+            pointBackgroundColor: CHART_COLORS.purple
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: CHART_COLORS.muted }, grid: { color: CHART_COLORS.grid } },
+          y: {
+            beginAtZero: true,
+            ticks: { color: CHART_COLORS.muted, precision: 0 },
+            grid: { color: CHART_COLORS.grid }
+          }
+        }
+      }
+    });
+
+    const topPages = countMap(pageviews, (r) => friendlyPageLabel(r.path)).slice(0, 6);
+    upsertChart("pages", $("#chart-pages"), {
+      type: "bar",
+      data: {
+        labels: topPages.map(([l]) => (l.length > 28 ? `${l.slice(0, 26)}…` : l)),
+        datasets: [
+          {
+            data: topPages.map(([, n]) => n),
+            backgroundColor: CHART_COLORS.purple,
+            borderRadius: 8
+          }
+        ]
+      },
+      options: {
+        indexAxis: "y",
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: {
+            beginAtZero: true,
+            ticks: { color: CHART_COLORS.muted, precision: 0 },
+            grid: { color: CHART_COLORS.grid }
+          },
+          y: { ticks: { color: CHART_COLORS.text }, grid: { display: false } }
+        }
+      }
+    });
+
+    const sources = countMap(pageviews, (r) => friendlyReferrerLabel(r.referrer)).slice(0, 6);
+    upsertChart("sources", $("#chart-sources"), {
+      type: "doughnut",
+      data: {
+        labels: sources.map(([l]) => l.replace(/ \(.*\)$/, "")),
+        datasets: [
+          {
+            data: sources.map(([, n]) => n),
+            backgroundColor: [
+              CHART_COLORS.purple,
+              CHART_COLORS.coral,
+              CHART_COLORS.teal,
+              CHART_COLORS.pink,
+              CHART_COLORS.amber,
+              "#C8A8E0"
+            ],
+            borderWidth: 0
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: "bottom",
+            labels: { color: CHART_COLORS.text, boxWidth: 12, font: { size: 11 } }
+          }
+        }
+      }
+    });
+
+    const clickNames = [
+      "resume_click",
+      "email_click",
+      "linkedin_click",
+      "github_click",
+      "project_click",
+      "substack_click"
+    ];
+    const clickData = clickNames.map((name) => events.filter((e) => e.name === name).length);
+    upsertChart("clicks", $("#chart-clicks"), {
+      type: "bar",
+      data: {
+        labels: clickNames.map(clickLabel),
+        datasets: [
+          {
+            data: clickData,
+            backgroundColor: [
+              CHART_COLORS.purple,
+              CHART_COLORS.coral,
+              CHART_COLORS.teal,
+              CHART_COLORS.pink,
+              CHART_COLORS.amber,
+              "#C8A8E0"
+            ],
+            borderRadius: 8
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: CHART_COLORS.muted }, grid: { display: false } },
+          y: {
+            beginAtZero: true,
+            ticks: { color: CHART_COLORS.muted, precision: 0 },
+            grid: { color: CHART_COLORS.grid }
+          }
+        }
+      }
+    });
+
+    const mobile = pageviews.filter((r) => r.device === "mobile").length;
+    const desktop = pageviews.filter((r) => r.device === "desktop").length;
+    upsertChart("devices", $("#chart-devices"), {
+      type: "doughnut",
+      data: {
+        labels: ["Mobile", "Desktop"],
+        datasets: [
+          {
+            data: [mobile, desktop],
+            backgroundColor: [CHART_COLORS.coral, CHART_COLORS.purple],
+            borderWidth: 0
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: "bottom",
+            labels: { color: CHART_COLORS.text, boxWidth: 12 }
+          }
+        }
+      }
+    });
+  }
+
+  function applyAnalyticsRange() {
+    const since = new Date(daysAgoISO(analyticsRangeDays)).getTime();
+    const pageviews = (analyticsCache.pageviews || []).filter(
+      (r) => new Date(r.created_at).getTime() >= since
+    );
+    const events = (analyticsCache.events || []).filter(
+      (r) => new Date(r.created_at).getTime() >= since
+    );
+
+    $("#an-views").textContent = String(pageviews.length);
+    $("#an-unique").textContent = String(countUnique(pageviews));
+    $("#an-resume").textContent = String(events.filter((e) => e.name === "resume_click").length);
+    $("#an-avg-time").textContent = formatAvgTime(events);
+
+    // Keep Overview cards in sync with latest 7d/30d/today from full cache
+    const allPv = analyticsCache.pageviews || [];
+    const since7 = new Date(daysAgoISO(7)).getTime();
+    const today = new Date(startOfDayISO()).getTime();
+    const last7 = allPv.filter((r) => new Date(r.created_at).getTime() >= since7);
+    const todayRows = allPv.filter((r) => new Date(r.created_at).getTime() >= today);
+    $("#stat-visitors-7").textContent = String(countUnique(last7));
+    $("#stat-visitors-30").textContent = String(countUnique(allPv));
+    $("#stat-views-today").textContent = String(todayRows.length);
+    $("#stat-resume").textContent = String(
+      (analyticsCache.events || []).filter(
+        (e) => e.name === "resume_click" && new Date(e.created_at).getTime() >= since7
+      ).length
+    );
+
+    renderRankedList($("#top-pages"), last7, "path", friendlyPageLabel);
+    renderRankedList($("#top-referrers"), last7, "referrer", friendlyReferrerLabel);
+
+    renderAnalyticsCharts(pageviews, events);
+  }
+
   async function loadAnalytics() {
     const since30 = daysAgoISO(30);
-    const since7Iso = daysAgoISO(7);
-
     const [pvRes, evRes] = await Promise.all([
       supabase
         .from("pageviews")
@@ -433,88 +712,12 @@
       supabase
         .from("events")
         .select("name, path, label, visitor_id, meta, created_at")
-        .gte("created_at", since7Iso)
+        .gte("created_at", since30)
     ]);
 
-    if (pvRes.error) {
-      $("#stat-visitors-7").textContent = "0";
-      $("#stat-visitors-30").textContent = "0";
-      $("#stat-views-today").textContent = "0";
-      $("#an-views-7").textContent = "0";
-      $("#an-unique-7").textContent = "0";
-      $("#an-mobile").textContent = "—";
-      $("#an-desktop").textContent = "—";
-    } else {
-      const rows = pvRes.data || [];
-      const since7 = new Date(since7Iso).getTime();
-      const today = new Date(startOfDayISO()).getTime();
-      const last7 = rows.filter((r) => new Date(r.created_at).getTime() >= since7);
-      const todayRows = rows.filter((r) => new Date(r.created_at).getTime() >= today);
-
-      $("#stat-visitors-7").textContent = String(countUnique(last7));
-      $("#stat-visitors-30").textContent = String(countUnique(rows));
-      $("#stat-views-today").textContent = String(todayRows.length);
-      $("#an-views-7").textContent = String(last7.length);
-      $("#an-unique-7").textContent = String(countUnique(last7));
-
-      const mobile = last7.filter((r) => r.device === "mobile").length;
-      const desktop = last7.filter((r) => r.device === "desktop").length;
-      const denom = mobile + desktop || 1;
-      $("#an-mobile").textContent = `${Math.round((mobile / denom) * 100)}%`;
-      $("#an-desktop").textContent = `${Math.round((desktop / denom) * 100)}%`;
-
-      renderRankedList($("#top-pages"), last7, "path", friendlyPageLabel);
-      renderRankedList($("#top-referrers"), last7, "referrer", friendlyReferrerLabel);
-
-      const byDay = new Map();
-      last7.forEach((r) => {
-        const day = r.created_at.slice(0, 10);
-        byDay.set(day, (byDay.get(day) || 0) + 1);
-      });
-      const dayRows = [...byDay.entries()].sort((a, b) => a[0].localeCompare(b[0]));
-      $("#views-by-day").innerHTML = dayRows.length
-        ? dayRows
-            .map(([day, n]) => `<div class="list-row"><span>${day}</span><strong>${n}</strong></div>`)
-            .join("")
-        : '<p class="empty">No pageviews in the last 7 days yet.</p>';
-    }
-
-    const events = evRes.error ? [] : evRes.data || [];
-    const countName = (n) => events.filter((e) => e.name === n).length;
-    const resume = countName("resume_click");
-    const email = countName("email_click");
-    const project = countName("project_click");
-
-    $("#stat-resume").textContent = String(resume);
-    $("#an-resume").textContent = String(resume);
-    $("#an-email").textContent = String(email);
-    $("#an-project").textContent = String(project);
-
-    const times = events
-      .filter((e) => e.name === "page_time")
-      .map((e) => Number(e.meta && e.meta.duration_sec))
-      .filter((n) => Number.isFinite(n) && n > 0);
-    if (times.length) {
-      const avg = Math.round(times.reduce((a, b) => a + b, 0) / times.length);
-      const mins = Math.floor(avg / 60);
-      const secs = avg % 60;
-      $("#an-avg-time").textContent = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
-    } else {
-      $("#an-avg-time").textContent = "—";
-    }
-
-    const eventCounts = new Map();
-    events.forEach((e) => {
-      if (e.name === "page_time") return;
-      const key = e.label ? `${e.name} · ${e.label}` : e.name;
-      eventCounts.set(key, (eventCounts.get(key) || 0) + 1);
-    });
-    const rankedEvents = [...eventCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 10);
-    $("#top-events").innerHTML = rankedEvents.length
-      ? rankedEvents
-          .map(([label, n]) => `<div class="list-row"><span>${escapeHtml(label)}</span><strong>${n}</strong></div>`)
-          .join("")
-      : '<p class="empty">No click events yet. Open the site and click Resume / project cards to test.</p>';
+    analyticsCache.pageviews = pvRes.error ? [] : pvRes.data || [];
+    analyticsCache.events = evRes.error ? [] : evRes.data || [];
+    applyAnalyticsRange();
   }
 
   async function loadMedia() {
@@ -607,6 +810,16 @@
   function wireEvents() {
     $$(".nav-tab").forEach((btn) => {
       btn.addEventListener("click", () => setTab(btn.dataset.tab));
+    });
+
+    $$(".range-toggle [data-range]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        analyticsRangeDays = Number(btn.dataset.range) || 7;
+        $$(".range-toggle [data-range]").forEach((b) => {
+          b.classList.toggle("active", b === btn);
+        });
+        applyAnalyticsRange();
+      });
     });
 
     $$("[data-goto]").forEach((btn) => {
