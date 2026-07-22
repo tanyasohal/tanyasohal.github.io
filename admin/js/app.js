@@ -281,7 +281,7 @@
       })
       .eq("id", "main");
     if (error) throw error;
-    showToast("Published");
+    showToast("Published — live site will show these edits");
   }
 
   function renderProjects(rows) {
